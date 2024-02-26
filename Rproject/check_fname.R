@@ -1,7 +1,7 @@
 #
 # require "stringi" library
 
-check_fname<-function(x){
+check_fname <- function(x){
   
   x=as.character(x)
   x=tolower(x)
@@ -75,7 +75,7 @@ check_fname<-function(x){
                x == "wilson lonardi villanueva morales"
   )
   
-  wrong_names=data.frame("pos"=xpos,"fnames"=x[xpos])
+  wrong_names = data.frame("pos" = xpos, "fname" = x[xpos])
   
   # checking farmer names
   x[x == "adelmo fernandez brieno"] = "adelmo fernandez briceno"
@@ -136,4 +136,5 @@ check_fname<-function(x){
   xres = list("fnames_checked" = x,"wrong_names" = wrong_names)
   
   return(xres)
+  
 }
