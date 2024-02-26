@@ -18,14 +18,24 @@ d6 <- read.xlsx(github_url_xlsx, sheet = 6)
 d7 <- read.xlsx(github_url_xlsx, sheet = 7)
 
 ################################################################################
-### 01 - Farmers-crop-site 
+### checking farmer names 
 ################################################################################
 
-d1$name <- tolower(d1$name)
-d1$name <- stri_trans_general(d1$name, id="Latin-ASCII")
+d1$fname <- paste(d1$name, d1$last_name, d1$mother_last_name, sep = " ")
+d2$fname <- d2$Productor
+d3$fname <- d3$Productor
+d4$fname <- d4$Productor
+d5$fname <- d5$Productor
+d6$fname <- d6$Productor
+d7$fname <- d7$Productor
 
+farmer_names <- tolower(c(d1$fname, d2$fname, d3$fname, d4$fname, d5$fname, d6$fname, d7$fname))
+farmer_names <- gsub("\\s+", " ",farmer_names)
+unique_farmer_names <- sort(unique(farmer_names))
 
-
+unique_farmer_names <- check_fnames(unique_farmer_names)$fnames_checked
+unique_farmer_names <- sort(unique(unique_farmer_names))
+check_fnames(unique_farmer_names)
 
 
 
