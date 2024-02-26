@@ -1,7 +1,7 @@
 #
 # require "stringi" library
 
-check_farmer_names<-function(x){
+check_fname<-function(x){
   
   x=as.character(x)
   x=tolower(x)
