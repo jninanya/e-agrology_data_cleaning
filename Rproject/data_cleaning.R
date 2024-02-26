@@ -10,7 +10,7 @@ library(dplyr)
 library(stringi)
 
 # load additional functions/scripts
-source("https://raw.githubusercontent.com/jninanya/e-agrology_data_cleaning/main/Rproject/check_fnames.R")
+source("https://raw.githubusercontent.com/jninanya/e-agrology_data_cleaning/main/Rproject/check_fname.R")
 
 # read data from github
 github_url_xlsx <- "https://github.com/jninanya/e-agrology_data_cleaning/raw/main/raw_data/Bitacora%20agronomica-Peru_MEAL_04%20de%20enero%202024.xlsx"
@@ -23,8 +23,9 @@ d5 <- read.xlsx(github_url_xlsx, sheet = 5)
 d6 <- read.xlsx(github_url_xlsx, sheet = 6)
 d7 <- read.xlsx(github_url_xlsx, sheet = 7)
 
+
 ################################################################################
-#                           checking farmer names 
+#                         checking farmers' names 
 ################################################################################
 
 d1$fname <- paste(d1$name, d1$last_name, d1$mother_last_name, sep = " ")
@@ -35,13 +36,23 @@ d5$fname <- d5$Productor
 d6$fname <- d6$Productor
 d7$fname <- d7$Productor
 
-farmer_names <- tolower(c(d1$fname, d2$fname, d3$fname, d4$fname, d5$fname, d6$fname, d7$fname))
-(unique_farmer_names <- sort(unique(farmer_names)))
+# quick check of farmers' names
+fnames <- tolower(c(d1$fname, d2$fname, d3$fname, d4$fname, d5$fname, d6$fname, d7$fname))
+(unique_fnames <- sort(unique(fnames)))
 
-unique_farmer_names <- check_fname(unique_farmer_names)$fnames_checked
-unique_farmer_names <- sort(unique(unique_farmer_names))
-check_fname(unique_farmer_names)
+# repeat several times "check_fname(unique_fnames)" until you see no more wrong names
+# $wrong_names
+# [1] pos             fname          
+# [3] corrected_names
+# <0 rows> (or 0-length row.names)
 
+check_fname(unique_fnames) 
+unique_fnames <- check_fname(unique_fnames)$fnames_checked
+unique_fnames <- sort(unique(unique_fnames))
+
+
+# final check of farmers' names
+check_fname_by_lastname(unique_fnames)
 
 
 
