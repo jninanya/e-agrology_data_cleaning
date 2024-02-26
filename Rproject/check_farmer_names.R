@@ -1,5 +1,7 @@
-
-###--- Function to check farmer names
+################################################################################
+#                      FUNCTION TO CHECK FARMER NAMES
+################################################################################
+#
 # require "stringi" library
 
 check_farmer_names<-function(x){
