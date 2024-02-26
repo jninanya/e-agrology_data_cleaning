@@ -36,7 +36,7 @@ d6$fname <- d6$Productor
 d7$fname <- d7$Productor
 
 farmer_names <- tolower(c(d1$fname, d2$fname, d3$fname, d4$fname, d5$fname, d6$fname, d7$fname))
-unique_farmer_names <- sort(unique(farmer_names))
+(unique_farmer_names <- sort(unique(farmer_names)))
 
 unique_farmer_names <- check_fnames(unique_farmer_names)$fnames_checked
 unique_farmer_names <- sort(unique(unique_farmer_names))
