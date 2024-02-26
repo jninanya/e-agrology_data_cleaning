@@ -1,5 +1,5 @@
 
-sort_by_lastname <- function(fname){
+check_fname_by_lastname <- function(fname){
   
   name1 = vector()
   name2 = vector()
@@ -53,9 +53,8 @@ sort_by_lastname <- function(fname){
   full_list = data.frame(lastname1, lastname2, name2, name1, farmer_name, length_name)
   wrong_list = full_list[full_list$length_name != 3 & full_list$length_name != 4, c("farmer_name", "length_name")]
   
-  xres = list("farmer_name" = farmer_name, 
-              "full_list" = full_list, 
-              "wrong_list" = wrong_list)
+  xres = list(farmer_name, full_list, wrong_list)
+  names(xres) = c("farmer_name", "full_list", "wrong_list")
   
   return(xres)
 
