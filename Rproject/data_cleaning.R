@@ -9,8 +9,9 @@ library(openxlsx)
 library(dplyr)
 library(stringi)
 
-# load additional functions/scripts
+# load additional functions/scripts/data
 source("https://raw.githubusercontent.com/jninanya/e-agrology_data_cleaning/main/Rproject/check_fnames.R")
+load(url("https://github.com/jninanya/e-agrology_data_cleaning/raw/main/Rproject/wrong_fnames_db.RData"))
 
 # read data from github
 github_url_xlsx <- "https://github.com/jninanya/e-agrology_data_cleaning/raw/main/raw_data/Bitacora%20agronomica-Peru_MEAL_04%20de%20enero%202024.xlsx"
