@@ -3,11 +3,11 @@ join_short_fnames <- function(x){
   x = unlist(strsplit(x, "\\s+"))
   n = length(x)
   
-  # identify position of short strings and separate in groups
+  # Identify the position of short strings and separate them into groups
   y1 = which(nchar(x) < 3)
   y2 = split(y1, cumsum(c(1, diff(y1) != 1)))
   
-  # join those short strings
+  # join short strings
   IF = vector()
   minIF = vector()
   fName = vector()
@@ -19,7 +19,7 @@ join_short_fnames <- function(x){
     fName[i] = paste0(x[ii], collapse = "_")
   }
   
-  # rewrite the name replacing short strings by those ones joined
+  # rewrite the name by replacing short strings with those that were joined
   k = 0
   nn = vector()
   IF1 = IF[!(IF %in% minIF)]
