@@ -3,6 +3,9 @@ join_short_fnames <- function(x){
   x = unlist(strsplit(x, "\\s+"))
   n = length(x)
   
+  xres = paste0(x, collapse = " ")
+  
+  if(sum(nchar(x) < 3)>=1){
   # Identify the position of short strings and separate them into groups
   y1 = which(nchar(x) < 3)
   y2 = split(y1, cumsum(c(1, diff(y1) != 1)))
@@ -38,6 +41,8 @@ join_short_fnames <- function(x){
   
   xres = paste0(nn, collapse = " ")
   
+  }
+
   return(xres)
   
 }
