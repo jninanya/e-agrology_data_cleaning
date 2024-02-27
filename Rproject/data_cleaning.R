@@ -41,21 +41,20 @@ d7$fname <- d7$Productor
 fnames <- tolower(c(d1$fname, d2$fname, d3$fname, d4$fname, d5$fname, d6$fname, d7$fname))
 (unique_fnames <- sort(unique(fnames)))
 
-# repeat several times "check_fname(unique_fnames)" until you see no more wrong names
-# $wrong_names
-# [1] pos             fname          
-# [3] corrected_names
+# repeat several times "check_fnames(fname = unique_fnames, db = wrong_fnames_db)" until you see no more wrong names 1 and 2
+# $wrong_fnames1
+# [1] xpos            wrong_fname     corrected_fname
 # <0 rows> (or 0-length row.names)
-check_fname(unique_fnames) 
-unique_fnames <- check_fname(unique_fnames)$fnames_checked
-unique_fnames <- sort(unique(unique_fnames))
+# 
+# $wrong_fnames2
+# [1] farmer_name length_name
+# <0 rows> (or 0-length row.names)
+(cf <- check_fnames(fname = unique_fnames, db = wrong_fnames_db)) 
+unique_fnames <- check_fnames(fname = unique_fnames, db = wrong_fnames_db)$full_fnames$fname0
 
-
-# final check of farmers' names
-sort(check_fname_by_lastname(unique_fnames)$farmer_name)
-
-#include outputs in the check_fname() function
-check_fname_by_lastname(unique_fnames)$wrong_list   
+# check if still there are some wrong farmers' names
+unique(sort(cf$sorted_full_fnames$farmer_name))  
+  
 
 
 

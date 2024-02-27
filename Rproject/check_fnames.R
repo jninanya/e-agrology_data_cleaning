@@ -32,19 +32,21 @@ check_fnames <- function(fname, db){
       stop("Farmer name is NULL or NA")
     }
     
-    # check if farmer name "i" is in wrong farmers' names database 
-    if(x %in% db$wrong_name){
-      i_wrong_fname = i_wrong_fname + 1
-      xpos[i_wrong_fname] = i
-      wrong_fname[i_wrong_fname] = db$wrong_name[db$wrong_name == x]
-      corrected_fname[i_wrong_fname] = db$corrected_name[db$wrong_name == x]
-      x = db$corrected_name[db$wrong_name == x]
-    }
     
-    fname0[i] = x
     xname = unlist(strsplit(x, "\\s+"))
     n = length(xname)
     
+    # check if farmer name "i" is in wrong farmers' names database 
+    if(sum(xname %in% db$wrong_name) >= 1){
+      i_wrong_fname = i_wrong_fname + 1
+      xpos[i_wrong_fname] = i
+      wrong_fname[i_wrong_fname] = paste0(xname, collapse = " ")
+      xname[xname %in% db$wrong_name] = db$corrected_name[db$wrong_name %in% xname]
+      corrected_fname[i_wrong_fname] = paste0(xname, collapse = " ")
+    }
+    
+    fname0[i] = paste0(xname, collapse = " ")
+ 
     if(n == 3){
       N1 = xname[1]
       N2 = NA
@@ -79,7 +81,7 @@ check_fnames <- function(fname, db){
   full_fnames = data.frame(lastname1, lastname2, name2, name1, farmer_name, length_name, fname0)
   sorted_full_fnames = full_fnames[order(full_fnames$lastname1), ]
   wrong_fnames1 = data.frame(xpos, wrong_fname, corrected_fname)
-  wrong_fnames2 = full_list[full_list$length_name != 3 & full_list$length_name != 4, c("farmer_name", "length_name")]
+  wrong_fnames2 = full_fnames[full_fnames$length_name != 3 & full_fnames$length_name != 4, c("farmer_name", "length_name")]
   
   xres = list(sorted_fnames, full_fnames, sorted_full_fnames, wrong_fnames1, wrong_fnames2)
   names(xres) = c("sorted_fnames", "full_fnames", "sorted_full_fnames", "wrong_fnames1", "wrong_fnames2")
