@@ -10,7 +10,7 @@ library(dplyr)
 library(stringi)
 
 # load additional functions/scripts
-source("https://raw.githubusercontent.com/jninanya/e-agrology_data_cleaning/main/Rproject/check_fname.R")
+source("https://raw.githubusercontent.com/jninanya/e-agrology_data_cleaning/main/Rproject/check_fnames.R")
 
 # read data from github
 github_url_xlsx <- "https://github.com/jninanya/e-agrology_data_cleaning/raw/main/raw_data/Bitacora%20agronomica-Peru_MEAL_04%20de%20enero%202024.xlsx"
@@ -45,15 +45,16 @@ fnames <- tolower(c(d1$fname, d2$fname, d3$fname, d4$fname, d5$fname, d6$fname, 
 # [1] pos             fname          
 # [3] corrected_names
 # <0 rows> (or 0-length row.names)
-
 check_fname(unique_fnames) 
 unique_fnames <- check_fname(unique_fnames)$fnames_checked
 unique_fnames <- sort(unique(unique_fnames))
 
 
 # final check of farmers' names
-check_fname_by_lastname(unique_fnames)
+sort(check_fname_by_lastname(unique_fnames)$farmer_name)
 
+#include outputs in the check_fname() function
+check_fname_by_lastname(unique_fnames)$wrong_list   
 
 
 

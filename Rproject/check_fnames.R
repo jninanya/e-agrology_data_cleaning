@@ -1,5 +1,5 @@
 
-check_fname_by_lastname <- function(fname){
+check_fnames <- function(fname){
   
   name1 = vector()
   name2 = vector()
