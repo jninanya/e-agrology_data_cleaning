@@ -1,5 +1,12 @@
 
-check_fnames <- function(fname){
+# require "stringi" and "dplyr" library
+
+check_fnames <- function(fname, db){
+  
+  fname = as.character(fname)
+  fname = tolower(fname)
+  fname = stri_trans_general(fname, id = "Latin-ASCII")
+  fname = gsub("\\s+", " ", fname)
   
   name1 = vector()
   name2 = vector()
@@ -7,16 +14,34 @@ check_fnames <- function(fname){
   lastname2 = vector()
   farmer_name = vector()
   length_name = vector()
+  
+  fname0 = vector()
+
+  xpos = vector()
+  wrong_fname = vector()
+  corrected_fname = vector()
+  i_wrong_fname = 0
 
   for(i in 1:length(fname)){
     
     x = fname[i]
     
+    # check if farmer name "i" is null or na
     if(is.null(x) || is.na(x)){
       warning(paste0("Please check row ", i))
       stop("Farmer name is NULL or NA")
     }
     
+    # check if farmer name "i" is in wrong farmers' names database 
+    if(x %in% db$wrong_name){
+      i_wrong_fname = i_wrong_fname + 1
+      xpos[i_wrong_fname] = i
+      wrong_fname[i_wrong_fname] = db$wrong_name[db$wrong_name == x]
+      corrected_fname[i_wrong_fname] = db$corrected_name[db$wrong_name == x]
+      x = db$corrected_name[db$wrong_name == x]
+    }
+    
+    fname0[i] = x
     xname = unlist(strsplit(x, "\\s+"))
     n = length(xname)
     
@@ -50,11 +75,14 @@ check_fnames <- function(fname){
     length_name[i] = n
   }
   
-  full_list = data.frame(lastname1, lastname2, name2, name1, farmer_name, length_name)
-  wrong_list = full_list[full_list$length_name != 3 & full_list$length_name != 4, c("farmer_name", "length_name")]
+  sorted_fnames = data.frame("by_name" = sort(fname0), "by_lastname" = sort(farmer_name))
+  full_fnames = data.frame(lastname1, lastname2, name2, name1, farmer_name, length_name, fname0)
+  sorted_full_fnames = full_fnames[order(full_fnames$lastname1), ]
+  wrong_fnames1 = data.frame(xpos, wrong_fname, corrected_fname)
+  wrong_fnames2 = full_list[full_list$length_name != 3 & full_list$length_name != 4, c("farmer_name", "length_name")]
   
-  xres = list(farmer_name, full_list, wrong_list)
-  names(xres) = c("farmer_name", "full_list", "wrong_list")
+  xres = list(sorted_fnames, full_fnames, sorted_full_fnames, wrong_fnames1, wrong_fnames2)
+  names(xres) = c("sorted_fnames", "full_fnames", "sorted_full_fnames", "wrong_fnames1", "wrong_fnames2")
   
   return(xres)
 
