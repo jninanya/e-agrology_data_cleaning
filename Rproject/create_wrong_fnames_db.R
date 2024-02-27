@@ -1,4 +1,4 @@
-# data base of wrong farmers' names
+# database of wrong farmers' names
 
 db <- data.frame() 
 db[1, 1:2] <- c("adelmo fernandez brieno", "adelmo fernandez briceno")
