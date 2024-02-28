@@ -32,7 +32,7 @@ check_fnames <- function(fname, db){
       stop("Farmer name is NULL or NA")
     }
     
-    
+    x = join_short_fnames(x)
     xname = unlist(strsplit(x, "\\s+"))
     n = length(xname)
     
