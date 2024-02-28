@@ -11,6 +11,7 @@ library(stringi)
 
 # load additional functions/scripts/data
 source("https://raw.githubusercontent.com/jninanya/e-agrology_data_cleaning/main/Rproject/check_fnames.R")
+source("https://raw.githubusercontent.com/jninanya/e-agrology_data_cleaning/main/Rproject/join_short_fnames.R")
 load(url("https://github.com/jninanya/e-agrology_data_cleaning/raw/main/Rproject/wrong_fnames_db.RData"))
 
 # read data from github
@@ -50,6 +51,10 @@ fnames <- tolower(c(d1$fname, d2$fname, d3$fname, d4$fname, d5$fname, d6$fname, 
 # [1] farmer_name length_name
 # <0 rows> (or 0-length row.names)
 (cf <- check_fnames(fname = unique_fnames, db = wrong_fnames_db)) 
+sort(unique(cf$full_fnames$farmer_name))
+sort(unique(c(cf$full_fnames$lastname1, cf$full_fnames$lastname2)))
+sort(unique(c(cf$full_fnames$name1, cf$full_fnames$name2)))
+
 unique_fnames <- check_fnames(fname = unique_fnames, db = wrong_fnames_db)$full_fnames$fname0
 
 # check if still there are some wrong farmers' names
