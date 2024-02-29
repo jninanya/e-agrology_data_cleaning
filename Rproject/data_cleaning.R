@@ -13,7 +13,6 @@ library(stringi)
 source("https://raw.githubusercontent.com/jninanya/e-agrology_data_cleaning/main/Rproject/check_fnames.R")
 source("https://raw.githubusercontent.com/jninanya/e-agrology_data_cleaning/main/Rproject/join_short_fnames.R")
 source("https://raw.githubusercontent.com/jninanya/e-agrology_data_cleaning/main/Rproject/wrong_full_fnames_db.R")
-
 load(url("https://github.com/jninanya/e-agrology_data_cleaning/raw/main/Rproject/wrong_fnames_db.RData"))
 
 # read data from github
@@ -44,14 +43,8 @@ d7$fname <- d7$Productor
 fnames <- tolower(c(d1$fname, d2$fname, d3$fname, d4$fname, d5$fname, d6$fname, d7$fname))
 (unique_fnames <- sort(unique(fnames)))
 
-# repeat several times "check_fnames(fname = unique_fnames, db = wrong_fnames_db)" until you see no more wrong names 1 and 2
-# $wrong_fnames1
-# [1] xpos            wrong_fname     corrected_fname
-# <0 rows> (or 0-length row.names)
-# 
-# $wrong_fnames2
-# [1] farmer_name length_name
-# <0 rows> (or 0-length row.names)
+# repeat several times "check_fnames(fname = unique_fnames, db = wrong_fnames_db)" 
+# until you see no more wrong names 1, 2, and 3
 (cf <- check_fnames(fname = unique_fnames, db = wrong_fnames_db, wf)) 
 sort(unique(cf$full_fnames$farmer_name))
 sort(unique(c(cf$full_fnames$lastname1, cf$full_fnames$lastname2)))
