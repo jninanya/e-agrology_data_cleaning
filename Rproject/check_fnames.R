@@ -1,7 +1,6 @@
 
 # require "stringi" and "dplyr" library
 
-
 check_fnames <- function(fname, db, wf){
   
   fname = as.character(fname)
@@ -22,6 +21,11 @@ check_fnames <- function(fname, db, wf){
   wrong_fname = vector()
   corrected_fname = vector()
   i_wrong_fname = 0
+  
+  xpos3 = vector()
+  wrong_fname3 = vector()
+  corrected_fname3 = vector()
+  i_wrong_fname3 = 0
 
   for(i in 1:length(fname)){
     
@@ -39,8 +43,7 @@ check_fnames <- function(fname, db, wf){
     n = length(xname)
     
     # check if farmer name "i" is in wrong farmers' names database 
-    cond0 = sum(xname %in% db$wrong_name | paste0(xname, collapse = " ") %in% wf$wfname)
-    if(cond0 >= 1){
+    if(sum(xname %in% db$wrong_name) >= 1){
       i_wrong_fname = i_wrong_fname + 1
       xpos[i_wrong_fname] = i
       wrong_fname[i_wrong_fname] = paste0(xname, collapse = " ")
@@ -50,11 +53,18 @@ check_fnames <- function(fname, db, wf){
         x0 <- c(x0, db$corrected_name[db$wrong_name==xx[ix]])
       }
       xname[xname %in% db$wrong_name] = x0
-      joined_name = paste0(xname, collapse = " ")
-      if(sum(joined_name %in% wf$wfname)>=1){
-        joined_name = wf$cfname[wf$wfname==joined_name]
-      }
-      corrected_fname[i_wrong_fname] = joined_name
+      corrected_fname[i_wrong_fname] = paste0(xname, collapse = " ")
+      
+    }
+    
+    joined_name = paste0(xname, collapse = " ")
+    if(sum(joined_name %in% wf$wfname)==1){
+      i_wrong_fname3 = i_wrong_fname3 + 1
+      xpos3[i_wrong_fname3] = i
+      cfname = wf$cfname[wf$wfname==joined_name]
+      xname = unlist(strsplit(cfname, "\\s+"))
+      wrong_fname3[i_wrong_fname3] = joined_name
+      corrected_fname3[i_wrong_fname3] = cfname
     }
     
     fname0[i] = paste0(xname, collapse = " ")
@@ -106,9 +116,10 @@ check_fnames <- function(fname, db, wf){
   sorted_full_fnames = full_fnames[order(full_fnames$lastname1), ]
   wrong_fnames1 = data.frame(xpos, wrong_fname, corrected_fname)
   wrong_fnames2 = full_fnames[full_fnames$length_name != 3 & full_fnames$length_name != 4, c("farmer_name", "length_name")]
+  wrong_fnames3 = data.frame(xpos3, wrong_fname3, corrected_fname3)
   
-  xres = list(sorted_fnames, full_fnames, sorted_full_fnames, wrong_fnames1, wrong_fnames2)
-  names(xres) = c("sorted_fnames", "full_fnames", "sorted_full_fnames", "wrong_fnames1", "wrong_fnames2")
+  xres = list(sorted_fnames, full_fnames, sorted_full_fnames, wrong_fnames1, wrong_fnames2, wrong_fnames3)
+  names(xres) = c("sorted_fnames", "full_fnames", "sorted_full_fnames", "wrong_fnames1", "wrong_fnames2", "wrong_fnames3")
   
   return(xres)
 
