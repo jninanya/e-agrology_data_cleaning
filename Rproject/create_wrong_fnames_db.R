@@ -2,7 +2,7 @@
 
 # wrong LASTNAMES
 db1 <- data.frame()
-db1[1, 1:2] <- c("ninanya", "ninanya")
+db1[1, 1:2] <- c("ninaya", "ninanya")
 db1[2, 1:2] <- c("brieno", "briceno")
 db1[3, 1:2] <- c("briseno", "briceno")
 db1[4, 1:2] <- c("`pinedo", "pinedo")
