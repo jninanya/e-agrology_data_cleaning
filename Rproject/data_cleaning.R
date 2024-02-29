@@ -61,6 +61,13 @@ unique_fnames <- check_fnames(fname = unique_fnames, db = wrong_fnames_db)$full_
 unique(sort(cf$sorted_full_fnames$farmer_name))  
   
 
+d1$fname0 <- check_fnames(fname = d1$fname, db = wrong_fnames_db)$full_fnames$fname0
+d2$fname0 <- check_fnames(fname = d2$fname, db = wrong_fnames_db)$full_fnames$fname0
+d3$fname0 <- check_fnames(fname = d3$fname, db = wrong_fnames_db)$full_fnames$fname0
+d4$fname0 <- check_fnames(fname = d4$fname, db = wrong_fnames_db)$full_fnames$fname0
+d5$fname0 <- check_fnames(fname = d5$fname, db = wrong_fnames_db)$full_fnames$fname0
+d6$fname0 <- check_fnames(fname = d6$fname, db = wrong_fnames_db)$full_fnames$fname0
+d7$fname0 <- check_fnames(fname = d7$fname, db = wrong_fnames_db)$full_fnames$fname0
 
 
 

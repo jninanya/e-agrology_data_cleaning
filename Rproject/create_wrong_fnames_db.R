@@ -47,6 +47,9 @@ db1[42, 1:2] <- c("vazques", "vasquez")
 db1[43, 1:2] <- c("villalovos", "villalobos")
 db1[44, 1:2] <- c("villarreal", "villareal")
 db1[45, 1:2] <- c("yparraguirre", "iparraguirre")
+db1[46, 1:2] <- c("ballena", "balbuena")
+db1[47, 1:2] <- c("muricio", "mauricio")
+db1[48, 1:2] <- c("videl", "vidal")
 
 
 
@@ -88,6 +91,17 @@ db2[33, 1:2] <- c("owaldo", "oswaldo")
 db2[34, 1:2] <- c("patrocinio\\t", "patrocinio")
 db2[35, 1:2] <- c("persy", "percy")
 db2[36, 1:2] <- c("sirila", "cirila")
+db2[37, 1:2] <- c("ynma", "ynmaculada")
+db2[38, 1:2] <- c("rosita", 'rosa')
+db2[39, 1:2] <- c("wigberto", "wilberto")
+db2[40, 1:2] <- c("almircar", "amilcar")
+db2[41, 1:2] <- c("victo", "victor")
+db2[42, 1:2] <- c("reinaldo", "reynaldo")
+db2[43, 1:2] <- c("sacarias", "zacarias")
+db2[44, 1:2] <- c("lonardi", "leonardo")
+db2[45, 1:2] <- c("wili", "willy")
+db2[46, 1:2] <- c("wily", "willy")
+db2[47, 1:2] <- c("rositas", "rosa")
 
 
 # rename colnames and sort data alphabetically 

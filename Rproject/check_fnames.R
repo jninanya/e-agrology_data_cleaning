@@ -26,6 +26,7 @@ check_fnames <- function(fname, db){
     
     x = fname[i]
     
+    if(!(is.na(x))){
     # check if farmer name "i" is null or na
     if(is.null(x) || is.na(x)){
       warning(paste0("Please check row ", i))
@@ -41,7 +42,12 @@ check_fnames <- function(fname, db){
       i_wrong_fname = i_wrong_fname + 1
       xpos[i_wrong_fname] = i
       wrong_fname[i_wrong_fname] = paste0(xname, collapse = " ")
-      xname[xname %in% db$wrong_name] = db$corrected_name[db$wrong_name %in% xname]
+      xx = xname[xname %in% db$wrong_name]
+      x0 = vector()
+      for(ix in 1:length(xx)){
+        x0 <- c(x0, db$corrected_name[db$wrong_name==xx[ix]])
+      }
+      xname[xname %in% db$wrong_name] = x0
       corrected_fname[i_wrong_fname] = paste0(xname, collapse = " ")
     }
     
@@ -75,6 +81,18 @@ check_fnames <- function(fname, db){
     lastname2[i] = L2
     farmer_name[i] = FN
     length_name[i] = n
+    } else {
+    
+    fname0[i] = NA
+    name1[i] = NA
+    name2[i] = NA
+    lastname1[i] = NA
+    lastname2[i] = NA
+    farmer_name[i] = NA
+    length_name[i] = NA
+    
+    }
+    
   }
   
   sorted_fnames = data.frame("by_name" = sort(fname0), "by_lastname" = sort(farmer_name))
