@@ -1,7 +1,8 @@
 
 # require "stringi" and "dplyr" library
 
-check_fnames <- function(fname, db){
+
+check_fnames <- function(fname, db, wf){
   
   fname = as.character(fname)
   fname = tolower(fname)
@@ -38,7 +39,8 @@ check_fnames <- function(fname, db){
     n = length(xname)
     
     # check if farmer name "i" is in wrong farmers' names database 
-    if(sum(xname %in% db$wrong_name) >= 1){
+    cond0 = sum(xname %in% db$wrong_name | paste0(xname, collapse = " ") %in% wf$wfname)
+    if(cond0 >= 1){
       i_wrong_fname = i_wrong_fname + 1
       xpos[i_wrong_fname] = i
       wrong_fname[i_wrong_fname] = paste0(xname, collapse = " ")
@@ -48,7 +50,11 @@ check_fnames <- function(fname, db){
         x0 <- c(x0, db$corrected_name[db$wrong_name==xx[ix]])
       }
       xname[xname %in% db$wrong_name] = x0
-      corrected_fname[i_wrong_fname] = paste0(xname, collapse = " ")
+      joined_name = paste0(xname, collapse = " ")
+      if(sum(joined_name %in% wf$wfname)>=1){
+        joined_name = wf$cfname[wf$wfname==joined_name]
+      }
+      corrected_fname[i_wrong_fname] = joined_name
     }
     
     fname0[i] = paste0(xname, collapse = " ")
