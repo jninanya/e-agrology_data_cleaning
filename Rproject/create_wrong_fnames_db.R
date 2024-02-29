@@ -50,6 +50,7 @@ db1[45, 1:2] <- c("yparraguirre", "iparraguirre")
 db1[46, 1:2] <- c("ballena", "balbuena")
 db1[47, 1:2] <- c("muricio", "mauricio")
 db1[48, 1:2] <- c("videl", "vidal")
+db1[49, 1:2] <- c("serin", "cerin")
 
 
 
@@ -102,6 +103,8 @@ db2[44, 1:2] <- c("lonardi", "leonardo")
 db2[45, 1:2] <- c("wili", "willy")
 db2[46, 1:2] <- c("wily", "willy")
 db2[47, 1:2] <- c("rositas", "rosa")
+db2[48, 1:2] <- c("ermitanio", "hermitanio")
+db2[49, 1:2] <- c("ygnacia", "ignacia")
 
 
 # rename colnames and sort data alphabetically 
