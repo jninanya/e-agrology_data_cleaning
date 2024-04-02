@@ -49,10 +49,10 @@ d7$fname <- d7$Productor
 fnames <- tolower(c(d1$fname, d2$fname, d3$fname, d4$fname, d5$fname, d6$fname, d7$fname))
 unique_fnames <- sort(unique(fnames))   
 # NOTE: For the moment, "unique_fnames" probably has wrong names that could be 
-#       duplicates of others, so it should carefully be checked
+#       duplicates of others, so it has carefully been checked below
 
 # QUICK CHECK OF FARMER NAMES
-# repeat several times line 50 until you see no more wrong names 1, 2, and 3
+# check wrong and duplicates names in "unique_fnames"
 (cf <- check_fnames(fname = unique_fnames, db = wrong_fnames_db, wf)) 
 sort(unique(cf$full_fnames$farmer_name))
 
