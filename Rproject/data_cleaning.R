@@ -1,6 +1,9 @@
 ################################################################################
 #                         e-AGROLOGY DATA CLEANING 
 ################################################################################
+#
+# Step 1 (S1): 
+# Step 2 (S2):
 
 rm(list=ls())
 
@@ -16,7 +19,7 @@ source("https://raw.githubusercontent.com/jninanya/e-agrology_data_cleaning/main
 source("https://raw.githubusercontent.com/jninanya/e-agrology_data_cleaning/main/Rproject/wrong_full_fnames_db.R")
 load(url("https://github.com/jninanya/e-agrology_data_cleaning/raw/main/Rproject/wrong_fnames_db.RData"))
 
-# read data from github
+# read data (each e-Agrology module) from github
 github_url_xlsx <- "https://github.com/jninanya/e-agrology_data_cleaning/raw/main/raw_data/Bitacora%20agronomica-Peru_MEAL_04%20de%20enero%202024.xlsx"
 
 d1 <- read.xlsx(github_url_xlsx, sheet = 1, startRow = 2)  # 1. Farmers module
@@ -28,10 +31,12 @@ d6 <- read.xlsx(github_url_xlsx, sheet = 6)                # 6. Crop module
 d7 <- read.xlsx(github_url_xlsx, sheet = 7)                # 7. Productivity module
 
 
-################################################################################
-#                          check all farmers' names 
-################################################################################
+#-------------------------------------------------------------------------------
+#                         S1. CHECK ALL FARMER NAMES 
+#-------------------------------------------------------------------------------
 
+# QUICK CHECK OF FARMER NAMES
+# add column of farmer names
 d1$fname <- paste(d1$name, d1$last_name, d1$mother_last_name, sep = " ")
 d2$fname <- d2$Productor
 d3$fname <- d3$Productor
@@ -40,9 +45,10 @@ d5$fname <- d5$Productor
 d6$fname <- d6$Productor
 d7$fname <- d7$Productor
 
-# quick check of farmers' names
+# merge all farmer names of each module and get their unique values
 fnames <- tolower(c(d1$fname, d2$fname, d3$fname, d4$fname, d5$fname, d6$fname, d7$fname))
-(unique_fnames <- sort(unique(fnames)))
+unique_fnames <- sort(unique(fnames))
+# this vector "unique_fnames" has wrong names that could be duplicates of others
 
 # repeat several times line 50 until you see no more wrong names 1, 2, and 3
 (cf <- check_fnames(fname = unique_fnames, db = wrong_fnames_db, wf)) 
