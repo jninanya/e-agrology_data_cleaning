@@ -35,7 +35,7 @@ d7 <- read.xlsx(github_url_xlsx, sheet = 7)                 # 7. Productivity mo
 #                         S1. CHECK ALL FARMER NAMES 
 #-------------------------------------------------------------------------------
 
-# QUICK CHECK OF FARMER NAMES
+# MERGE FARMER NAMES OF EACH MODULE
 # Add column of farmer names
 d1$fname <- paste(d1$name, d1$last_name, d1$mother_last_name, sep = " ")
 d2$fname <- d2$Productor
@@ -45,10 +45,11 @@ d5$fname <- d5$Productor
 d6$fname <- d6$Productor
 d7$fname <- d7$Productor
 
-# Merge farmer names of each module and get their unique values
+# Merge and get unique values of farmer names
 fnames <- tolower(c(d1$fname, d2$fname, d3$fname, d4$fname, d5$fname, d6$fname, d7$fname))
 unique_fnames <- sort(unique(fnames))   # It still has wrong names that could be duplicates of others
 
+# QUICK CHECK OF FARMER NAMES
 # repeat several times line 50 until you see no more wrong names 1, 2, and 3
 (cf <- check_fnames(fname = unique_fnames, db = wrong_fnames_db, wf)) 
 sort(unique(cf$full_fnames$farmer_name))
