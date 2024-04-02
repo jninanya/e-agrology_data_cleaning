@@ -1,13 +1,15 @@
 
 # require "stringi" and "dplyr" library
 
-check_fnames <- function(fname, db, wf){
+check_fnames <- function(fnames, db, wf, na.rm = TRUE){
   
-  fname = as.character(fname)
-  fname = tolower(fname)
-  fname = stri_trans_general(fname, id = "Latin-ASCII")
-  fname = gsub("\\s+", " ", fname)
+  # quick cleaning of farmer names
+  fnames <- as.character(fnames)
+  fnames <- tolower(fnames)
+  fnames <- stri_trans_general(fnames, id = "Latin-ASCII")
+  fnames <- gsub("\\s+", " ", fnames)
   
+  # xx 
   name1 = vector()
   name2 = vector()
   lastname1 = vector()
@@ -15,98 +17,128 @@ check_fnames <- function(fname, db, wf){
   farmer_name = vector()
   length_name = vector()
   
-  fname0 = vector()
+  bcfnames = vector()
 
-  xpos = vector()
-  wrong_fname = vector()
-  corrected_fname = vector()
-  i_wrong_fname = 0
-  
-  xpos3 = vector()
-  wrong_fname3 = vector()
-  corrected_fname3 = vector()
-  i_wrong_fname3 = 0
+  # define variables for error 1
+  i1 <- 0
+  xpos1 <- vector()
+  wfnames1 <- vector()
+  cfnames1 <- vector()
+ 
+  # define variables for error 2
+  i2 <- 0 
+  xpos2 <- vector()
+  wfnames2 <- vector()
+  cfnames2 <- vector()
 
-  for(i in 1:length(fname)){
+  # check farmer names individually (one by one)
+  for(i in 1:length(fnames)){
     
-    x = fname[i]
+    x <- fnames[i]
+    na.fnames <- is.null(x) || is.na(x)
     
-    if(!(is.na(x))){
-    # check if farmer name "i" is null or na
-    if(is.null(x) || is.na(x)){
+    # COND1: FARMER NAMES IS NOT NA
+    if(!na.fnames){
+      
+      # check short farmer names/lastnames and separate them individually
+      x <- join_short_fnames(x)
+      xname <- unlist(strsplit(x, "\\s+"))
+      n <- length(xname)
+      
+      # CHECK ERROR 1
+      # when name or lastname is on "db" database
+      if(sum(xname %in% db$wfnames) >= 1){
+        
+        # identify wrong name/lastname
+        i1 <- i1 + 1
+        xpos1[i1] <- i
+        wfnames1[i1] <- paste0(xname, collapse = " ")
+        
+        # 
+        xx = xname[xname %in% db$wfnames]
+        x0 = vector()
+        
+        for(ii in 1:length(xx)){
+          
+            x0 <- c(x0, db$cfnames[db$wfnames==xx[ii]])
+        }
+        
+        xname[xname %in% db$wfnames] = x0
+        cfnames1[i1] = paste0(xname, collapse = " ")
+        
+      }
+
+      # CHECK ERROR 1
+      # when the farmer name is on "wf" database
+      joined_name = paste0(xname, collapse = " ")
+      
+      if(sum(joined_name %in% wf$wfname)==1){
+        
+        i2 = i2 + 1
+        xpos2[i2] = i
+        cfname = wf$cfname[wf$wfname==joined_name]
+        xname = unlist(strsplit(cfname, "\\s+"))
+        wfnames2[i2] = joined_name
+        cfnames2[i2] = cfname
+      }
+      
+      
+      
+      fname0[i] = paste0(xname, collapse = " ")
+      
+      if(n == 3){
+        N1 = xname[1]
+        N2 = NA
+        L1 = xname[2]
+        L2 = xname[3]
+        FN = paste0(L1, " ", L2, ", ", N1)
+        
+      }else if(n == 4){
+        
+        N1 = xname[1]
+        N2 = xname[2]
+        L1 = xname[3]
+        L2 = xname[4]
+        FN = paste0(L1, " ", L2, ", ", N1, " ", N2)
+        
+      } else {
+        
+        N1 = NA
+        N2 = NA
+        L1 = NA
+        L2 = NA
+        FN = x
+        
+      }
+      
+      name1[i] = N1
+      name2[i] = N2
+      lastname1[i] = L1
+      lastname2[i] = L2
+      farmer_name[i] = FN
+      length_name[i] = n
+      
+    # COND2: FARMER NAMES IS NA
+    } else {
+      
+      # 
+      if(!na.rm){
+
       warning(paste0("Please check row ", i))
       stop("Farmer name is NULL or NA")
-    }
-    
-    x = join_short_fnames(x)
-    xname = unlist(strsplit(x, "\\s+"))
-    n = length(xname)
-    
-    # check if farmer name "i" is in wrong farmers' names database 
-    if(sum(xname %in% db$wrong_name) >= 1){
-      i_wrong_fname = i_wrong_fname + 1
-      xpos[i_wrong_fname] = i
-      wrong_fname[i_wrong_fname] = paste0(xname, collapse = " ")
-      xx = xname[xname %in% db$wrong_name]
-      x0 = vector()
-      for(ix in 1:length(xx)){
-        x0 <- c(x0, db$corrected_name[db$wrong_name==xx[ix]])
+
+      } else {
+      
+      fname0[i] = NA
+      name1[i] = NA
+      name2[i] = NA
+      lastname1[i] = NA
+      lastname2[i] = NA
+      farmer_name[i] = NA
+      length_name[i] = NA
+      
       }
-      xname[xname %in% db$wrong_name] = x0
-      corrected_fname[i_wrong_fname] = paste0(xname, collapse = " ")
-      
-    }
-    
-    joined_name = paste0(xname, collapse = " ")
-    if(sum(joined_name %in% wf$wfname)==1){
-      i_wrong_fname3 = i_wrong_fname3 + 1
-      xpos3[i_wrong_fname3] = i
-      cfname = wf$cfname[wf$wfname==joined_name]
-      xname = unlist(strsplit(cfname, "\\s+"))
-      wrong_fname3[i_wrong_fname3] = joined_name
-      corrected_fname3[i_wrong_fname3] = cfname
-    }
-    
-    fname0[i] = paste0(xname, collapse = " ")
- 
-    if(n == 3){
-      N1 = xname[1]
-      N2 = NA
-      L1 = xname[2]
-      L2 = xname[3]
-      FN = paste0(L1, " ", L2, ", ", N1)
-      
-    } else if(n == 4){
-      N1 = xname[1]
-      N2 = xname[2]
-      L1 = xname[3]
-      L2 = xname[4]
-      FN = paste0(L1, " ", L2, ", ", N1, " ", N2)
-      
-    } else {
-      N1 = NA
-      N2 = NA
-      L1 = NA
-      L2 = NA
-      FN = x
-    }
-  
-    name1[i] = N1
-    name2[i] = N2
-    lastname1[i] = L1
-    lastname2[i] = L2
-    farmer_name[i] = FN
-    length_name[i] = n
-    } else {
-    
-    fname0[i] = NA
-    name1[i] = NA
-    name2[i] = NA
-    lastname1[i] = NA
-    lastname2[i] = NA
-    farmer_name[i] = NA
-    length_name[i] = NA
-    
+
     }
     
   }

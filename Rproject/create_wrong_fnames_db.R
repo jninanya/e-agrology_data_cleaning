@@ -111,11 +111,11 @@ db2[49, 1:2] <- c("ygnacia", "ignacia")
 
 
 # rename colnames and sort data alphabetically 
-colnames(db1) <- c("wrong_name", "corrected_name")
-wrong_fnames_db1 <- db1[order(db1$corrected_name, decreasing = FALSE),]
+colnames(db1) <- c("wfnames", "cfnames")
+wrong_fnames_db1 <- db1[order(db1$cfnames, decreasing = FALSE),]
 
-colnames(db2) <- c("wrong_name", "corrected_name")
-wrong_fnames_db2 <- db2[order(db2$corrected_name, decreasing = FALSE),]
+colnames(db2) <- c("wfnames", "cfnames")
+wrong_fnames_db2 <- db2[order(db2$cfnames, decreasing = FALSE),]
 
 # final output
 wrong_fnames_db <- rbind(wrong_fnames_db1, wrong_fnames_db2)
