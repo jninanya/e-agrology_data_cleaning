@@ -48,8 +48,8 @@ d7$fname <- d7$Productor
 # Merge and get unique values of farmer names
 fnames <- tolower(c(d1$fname, d2$fname, d3$fname, d4$fname, d5$fname, d6$fname, d7$fname))
 unique_fnames <- sort(unique(fnames))   
-# NOTE: "unique_fnames" probably has wrong names that could be duplicates of 
-#        others at this point, so it should be carefully checked
+# NOTE: For the moment, "unique_fnames" probably has wrong names that could be 
+#       duplicates of others, so it should carefully be checked
 
 # QUICK CHECK OF FARMER NAMES
 # repeat several times line 50 until you see no more wrong names 1, 2, and 3
