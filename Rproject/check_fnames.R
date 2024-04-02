@@ -9,7 +9,7 @@ check_fnames <- function(fnames, db, wf, na.rm = TRUE){
   fnames <- stri_trans_general(fnames, id = "Latin-ASCII")
   fnames <- gsub("\\s+", " ", fnames)
   
-  # xx 
+  # output vectors
   name1 = vector()
   name2 = vector()
   lastname1 = vector()
@@ -17,7 +17,7 @@ check_fnames <- function(fnames, db, wf, na.rm = TRUE){
   farmer_name = vector()
   length_name = vector()
   
-  bcfnames = vector()
+  cfname = vector()
 
   # define variables for error 1
   i1 <- 0
@@ -49,42 +49,49 @@ check_fnames <- function(fnames, db, wf, na.rm = TRUE){
       # when name or lastname is on "db" database
       if(sum(xname %in% db$wfnames) >= 1){
         
-        # identify wrong name/lastname
+        # identify position of the wrong farmer name
         i1 <- i1 + 1
         xpos1[i1] <- i
         wfnames1[i1] <- paste0(xname, collapse = " ")
         
-        # 
-        xx = xname[xname %in% db$wfnames]
-        x0 = vector()
+        # identify which name and/or lastname is wrong 
+        w_list <- xname[xname %in% db$wfnames]
+        c_list <- vector()
         
-        for(ii in 1:length(xx)){
+        # correct wrong names/lastnames previously identified
+        for(ii in 1:length(w_list)){
           
-            x0 <- c(x0, db$cfnames[db$wfnames==xx[ii]])
+          c_list <- c(c_list, db$cfnames[db$wfnames == w_list[ii]])
+          
         }
         
-        xname[xname %in% db$wfnames] = x0
+        # replace wrong names/lastnames by corrected ones
+        xname[xname %in% db$wfnames] = c_list
         cfnames1[i1] = paste0(xname, collapse = " ")
         
       }
-
-      # CHECK ERROR 1
-      # when the farmer name is on "wf" database
-      joined_name = paste0(xname, collapse = " ")
       
-      if(sum(joined_name %in% wf$wfname)==1){
+      #xname <- xname
+
+      # CHECK ERROR 2
+      # when the farmer name is on "wf" database
+      joined_fname = paste0(xname, collapse = " ")
+      
+      if(sum(joined_fname %in% wf$wfnames) == 1){
         
+        # identify position of the wrong farmer name
         i2 = i2 + 1
         xpos2[i2] = i
-        cfname = wf$cfname[wf$wfname==joined_name]
-        xname = unlist(strsplit(cfname, "\\s+"))
-        wfnames2[i2] = joined_name
-        cfnames2[i2] = cfname
+        wfnames2[i2] = joined_fname
+        
+        # replace the wrong fname by the corrected one
+        c_fname = wf$cfnames[wf$wfnames == joined_fname]
+        cfnames2[i2] = c_fname
+        xname = unlist(strsplit(c_fname, "\\s+"))
       }
       
-      
-      
-      fname0[i] = paste0(xname, collapse = " ")
+      # final corrected farmer name 
+      cfname[i] = paste0(xname, collapse = " ")
       
       if(n == 3){
         N1 = xname[1]
@@ -93,7 +100,7 @@ check_fnames <- function(fnames, db, wf, na.rm = TRUE){
         L2 = xname[3]
         FN = paste0(L1, " ", L2, ", ", N1)
         
-      }else if(n == 4){
+      } else if(n == 4){
         
         N1 = xname[1]
         N2 = xname[2]
@@ -129,7 +136,7 @@ check_fnames <- function(fnames, db, wf, na.rm = TRUE){
 
       } else {
       
-      fname0[i] = NA
+      cfname[i] = NA
       name1[i] = NA
       name2[i] = NA
       lastname1[i] = NA
@@ -143,15 +150,13 @@ check_fnames <- function(fnames, db, wf, na.rm = TRUE){
     
   }
   
-  sorted_fnames = data.frame("by_name" = sort(fname0), "by_lastname" = sort(farmer_name))
-  full_fnames = data.frame(lastname1, lastname2, name2, name1, farmer_name, length_name, fname0)
-  sorted_full_fnames = full_fnames[order(full_fnames$lastname1), ]
-  wrong_fnames1 = data.frame(xpos, wrong_fname, corrected_fname)
-  wrong_fnames2 = full_fnames[full_fnames$length_name != 3 & full_fnames$length_name != 4, c("farmer_name", "length_name")]
-  wrong_fnames3 = data.frame(xpos3, wrong_fname3, corrected_fname3)
+  out <- data.frame(lastname1, lastname2, name2, name1, farmer_name, length_name, cfname)
+  err1 <- data.frame("xpos" = xpos1, "wfname" = wfnames1, "cfname" = cfnames1)
+  err2 <- data.frame("xpos" = xpos2, "wfname" = wfnames2, "cfname" = cfnames2)
+  err3 <- out[!(out$length_name >= 3 & out$length_name <= 4), c("cfname", "farmer_name", "length_name")]
   
-  xres = list(sorted_fnames, full_fnames, sorted_full_fnames, wrong_fnames1, wrong_fnames2, wrong_fnames3)
-  names(xres) = c("sorted_fnames", "full_fnames", "sorted_full_fnames", "wrong_fnames1", "wrong_fnames2", "wrong_fnames3")
+  xres = list(out, err1, err2, err3)
+  names(xres) = c("out", "err1", "err2", "err3")
   
   return(xres)
 
