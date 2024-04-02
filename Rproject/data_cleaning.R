@@ -47,8 +47,7 @@ d7$fname <- d7$Productor
 
 # merge all farmer names of each module and get their unique values
 fnames <- tolower(c(d1$fname, d2$fname, d3$fname, d4$fname, d5$fname, d6$fname, d7$fname))
-unique_fnames <- sort(unique(fnames))
-# this vector "unique_fnames" has wrong names that could be duplicates of others
+unique_fnames <- sort(unique(fnames))   # this vector "unique_fnames" has wrong names that could be duplicates of others
 
 # repeat several times line 50 until you see no more wrong names 1, 2, and 3
 (cf <- check_fnames(fname = unique_fnames, db = wrong_fnames_db, wf)) 
