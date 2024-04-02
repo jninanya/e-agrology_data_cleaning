@@ -1,4 +1,8 @@
-# database of wrong farmers' names
+################################################################################
+# DATA BASE OF WRONG FARMERS' NAMES
+################################################################################
+#
+
 
 # wrong LASTNAMES
 db1 <- data.frame()
@@ -51,7 +55,6 @@ db1[46, 1:2] <- c("ballena", "balbuena")
 db1[47, 1:2] <- c("muricio", "mauricio")
 db1[48, 1:2] <- c("videl", "vidal")
 db1[49, 1:2] <- c("serin", "cerin")
-
 
 
 # wrong NAMES
@@ -114,6 +117,7 @@ wrong_fnames_db1 <- db1[order(db1$corrected_name, decreasing = FALSE),]
 colnames(db2) <- c("wrong_name", "corrected_name")
 wrong_fnames_db2 <- db2[order(db2$corrected_name, decreasing = FALSE),]
 
+# final output
 wrong_fnames_db <- rbind(wrong_fnames_db1, wrong_fnames_db2)
 
 save(wrong_fnames_db, file = "wrong_fnames_db.RData")

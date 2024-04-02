@@ -11,6 +11,7 @@ library(stringi)
 
 # load additional functions/scripts/data
 source("https://raw.githubusercontent.com/jninanya/e-agrology_data_cleaning/main/Rproject/check_fnames.R")
+source("https://raw.githubusercontent.com/jninanya/e-agrology_data_cleaning/main/Rproject/check_dup.R")
 source("https://raw.githubusercontent.com/jninanya/e-agrology_data_cleaning/main/Rproject/join_short_fnames.R")
 source("https://raw.githubusercontent.com/jninanya/e-agrology_data_cleaning/main/Rproject/wrong_full_fnames_db.R")
 load(url("https://github.com/jninanya/e-agrology_data_cleaning/raw/main/Rproject/wrong_fnames_db.RData"))
@@ -18,17 +19,17 @@ load(url("https://github.com/jninanya/e-agrology_data_cleaning/raw/main/Rproject
 # read data from github
 github_url_xlsx <- "https://github.com/jninanya/e-agrology_data_cleaning/raw/main/raw_data/Bitacora%20agronomica-Peru_MEAL_04%20de%20enero%202024.xlsx"
 
-d1 <- read.xlsx(github_url_xlsx, sheet = 1, startRow = 2)
-d2 <- read.xlsx(github_url_xlsx, sheet = 2)
-d3 <- read.xlsx(github_url_xlsx, sheet = 3)
-d4 <- read.xlsx(github_url_xlsx, sheet = 4)
-d5 <- read.xlsx(github_url_xlsx, sheet = 5)
-d6 <- read.xlsx(github_url_xlsx, sheet = 6)
-d7 <- read.xlsx(github_url_xlsx, sheet = 7)
+d1 <- read.xlsx(github_url_xlsx, sheet = 1, startRow = 2)  # 1. Farmers module
+d2 <- read.xlsx(github_url_xlsx, sheet = 3)                # 2. Sowing module
+d3 <- read.xlsx(github_url_xlsx, sheet = 2)                # 3. Visits module
+d4 <- read.xlsx(github_url_xlsx, sheet = 4)                # 4. Harvest-1st module
+d5 <- read.xlsx(github_url_xlsx, sheet = 5)                # 5. Harvest-2nd module
+d6 <- read.xlsx(github_url_xlsx, sheet = 6)                # 6. Crop module
+d7 <- read.xlsx(github_url_xlsx, sheet = 7)                # 7. Productivity module
 
 
 ################################################################################
-#                       checking all farmers' names 
+#                          check all farmers' names 
 ################################################################################
 
 d1$fname <- paste(d1$name, d1$last_name, d1$mother_last_name, sep = " ")
@@ -54,7 +55,6 @@ unique_fnames <- sort(unique(unique_fnames))
 sort(unique(cf$sorted_full_fnames$fname0))  
   
 # fix dx$fname using check_fnames() function
-
 cf1 <- check_fnames(fname = d1$fname, db = wrong_fnames_db, wf)
 cf2 <- check_fnames(fname = d2$fname, db = wrong_fnames_db, wf)
 cf3 <- check_fnames(fname = d3$fname, db = wrong_fnames_db, wf)
@@ -93,16 +93,49 @@ mtx[mtx$V8 == 1, ]
 mtx[mtx$V8 == 2, ]
 
 ################################################################################
-#                       select data per XLSX's sheet 
+#                        select data per XLSX's sheet 
 ################################################################################
 
-d1$name1 <- cf1$full_fnames$name1
-d1$name2 <- cf1$full_fnames$name2
-d1$lastname1 <- cf1$full_fnames$lastname1
-d1$lastname2 <- cf1$full_fnames$lastname2
-d1$farmer_name <- cf1$full_fnames$fname0
-d1$fname <- cf1$full_fnames$farmer_name
+#d1$name1 <- cf1$full_fnames$name1
+#d1$name2 <- cf1$full_fnames$name2
+#d1$lastname1 <- cf1$full_fnames$lastname1
+#d1$lastname2 <- cf1$full_fnames$lastname2
+#d1$farmer_name <- cf1$full_fnames$fname0
+#d1$fname <- cf1$full_fnames$farmer_name
+
+d1$farmer_name <- cf1$full_fnames$farmer_name
+d1$plotID <- d1$Nombre.de.la.Parcela
+d1$ID <- paste0(d1$farmer_name, " + ", d1$plotID)
+
+dup1 <- check_dup(d1$farmer_name)
+d1[dup1$res.sorted$xpos, c("farmer_name", "plotID")]
+
+
+
 d1$farmer_gender <- d1$farmer.gender
+d1$date_birth <- convertToDate(d1$date_birt)
+d1$education_level <- d1$level_education
+d1$cell_phone <- d1$cell.phone
+d1$experience <- d1$experience
+d1$organization <- d1$Organization
+d1$departament <- d1$Departamento
+d1$province <- d1$Province
+d1$locality <- d1$Direccion
+d1$plot_area <- d1$Superficie.Total.de.la.parcela
+d1$type_property <- d1$type_property
+d1$possesion_land <- d1$possesion_land
+d1$coordinates <- d1$coordenadas
+d1$record_date <- d1$Fecha_creación.de.la.bitacora
+d1$season <- d1$`cycle/year`
+d1$water_regime <- d1$water_regime
+d1$production_type <- d1$production.type
+
+
+
+
+
+
+
 
 
 
