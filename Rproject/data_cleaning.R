@@ -48,15 +48,26 @@ d7$fname <- d7$Productor
 # Merge and get unique values of farmer names
 fnames <- tolower(c(d1$fname, d2$fname, d3$fname, d4$fname, d5$fname, d6$fname, d7$fname))
 unique_fnames <- sort(unique(fnames))   
-# NOTE: For the moment, "unique_fnames" probably has wrong names that could be 
+# NOTE: At this point, "unique_fnames" probably has wrong names that could be 
 #       duplicates of others, so it has carefully been checked below
 
 # QUICK CHECK OF FARMER NAMES
 # check wrong and duplicates names in "unique_fnames"
-(cf <- check_fnames(fname = unique_fnames, db = wrong_fnames_db, wf)) 
-sort(unique(cf$full_fnames$farmer_name))
+cf <- check_fnames(fnames = unique_fnames, db = wrong_fnames_db, wf = wf, na.rm = TRUE)
+cf$err1
+cf$err2
+cf$err3
+sort(unique(cf$out$farmer_name))
+# NOTE: This part is "manually" recursive in the following way:
+#       1. Run "cf <- check_fnames(...)"
+#       2. See in console the detected errors: cf$err1, cf$err2, and cf$err3
+#       3. See in console "sort(unique(cf$out$farmer_name))" and identify others 
+#          wrong farmer names still not detected
+#       4. If some wrong farmer names are detected, add them manually in database
+#          "wrong_fnames_db.RData" editing "create_wrong_fnames_db.R". Then run it.
+#       5. Repeat 1 to 4 until you do not see any error message in "cf$err1-3"
 
-unique_fnames <- check_fnames(fname = unique_fnames, db = wrong_fnames_db, wf)$full_fnames$fname0
+unique_fnames <- cf$out$cfname
 unique_fnames <- sort(unique(unique_fnames))
 
 # check if still there are some wrong farmers' names
