@@ -52,45 +52,43 @@ unique_fnames <- sort(unique(fnames))
 #       duplicates of others, so it has carefully been checked below
 
 # QUICK CHECK OF FARMER NAMES
-# check wrong and duplicates names in "unique_fnames"
+# Check wrong and duplicates names in "unique_fnames"
 cf <- check_fnames(fnames = unique_fnames, db = wrong_fnames_db, wf = wf, na.rm = TRUE)
-cf$err1
-cf$err2
-cf$err3
+cf$err1   # 
+cf$err2   # 
+cf$err3   # 
 sort(unique(cf$out$farmer_name))
 # NOTE: This part is "manually" recursive in the following way:
 #       1. Run "cf <- check_fnames(...)"
 #       2. See in console the detected errors: cf$err1, cf$err2, and cf$err3
-#       3. See in console "sort(unique(cf$out$farmer_name))" and identify others 
-#          wrong farmer names still not detected
+#       3. See in console "sort(unique(cf$out$farmer_name))" and identify 
+#          visually others wrong farmer names still not detected
 #       4. If some wrong farmer names are detected, add them manually in database
-#          "wrong_fnames_db.RData" editing "create_wrong_fnames_db.R". Then run it.
+#          "wrong_fnames_db.RData" editing "create_wrong_fnames_db.R"
 #       5. Repeat 1 to 4 until you do not see any error message in "cf$err1-3"
 
+# Final list of unique farmer names
 unique_fnames <- cf$out$cfname
 unique_fnames <- sort(unique(unique_fnames))
 
-# check if still there are some wrong farmers' names
-sort(unique(cf$sorted_full_fnames$fname0))  
-  
-# fix dx$fname using check_fnames() function
-cf1 <- check_fnames(fname = d1$fname, db = wrong_fnames_db, wf)
-cf2 <- check_fnames(fname = d2$fname, db = wrong_fnames_db, wf)
-cf3 <- check_fnames(fname = d3$fname, db = wrong_fnames_db, wf)
-cf4 <- check_fnames(fname = d4$fname, db = wrong_fnames_db, wf)
-cf5 <- check_fnames(fname = d5$fname, db = wrong_fnames_db, wf)
-cf6 <- check_fnames(fname = d6$fname, db = wrong_fnames_db, wf)
-cf7 <- check_fnames(fname = d7$fname, db = wrong_fnames_db, wf)
+# CORRECT FARMER NAMES FOR EACH e-AGROLOGY MODULE
+cf1 <- check_fnames(fnames = d1$fname, db = wrong_fnames_db, wf)
+cf2 <- check_fnames(fnames = d2$fname, db = wrong_fnames_db, wf)
+cf3 <- check_fnames(fnames = d3$fname, db = wrong_fnames_db, wf)
+cf4 <- check_fnames(fnames = d4$fname, db = wrong_fnames_db, wf)
+cf5 <- check_fnames(fnames = d5$fname, db = wrong_fnames_db, wf)
+cf6 <- check_fnames(fnames = d6$fname, db = wrong_fnames_db, wf)
+cf7 <- check_fnames(fnames = d7$fname, db = wrong_fnames_db, wf)
 
-d1$fname <- cf1$full_fnames$fname0
-d2$fname <- cf2$full_fnames$fname0
-d3$fname <- cf3$full_fnames$fname0
-d4$fname <- cf4$full_fnames$fname0
-d5$fname <- cf5$full_fnames$fname0
-d6$fname <- cf6$full_fnames$fname0
-d7$fname <- cf7$full_fnames$fname0
+d1$fname <- cf1$out$cfname
+d2$fname <- cf2$out$cfname
+d3$fname <- cf3$out$cfname
+d4$fname <- cf4$out$cfname
+d5$fname <- cf5$out$cfname
+d6$fname <- cf6$out$cfname
+d7$fname <- cf7$out$cfname
 
-# check if dx$fname is in unique_fnames
+# CHECK IF FARMER NAMES OF EACH e-AGROLOGY MODULE IS IN "unique_fnames" 
 fnames_list <- list(d1$fname, d2$fname, d3$fname, d4$fname, d5$fname, d6$fname, d7$fname)
 
 n1 <- length(unique_fnames)
